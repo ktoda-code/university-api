@@ -35,7 +35,6 @@ public class StudentRestController {
         return ResponseEntity.ok(studentService.findAll());
     }
 
-
     /**
      * Returns a student with a specific id.
      * If the student doesn't exist, it throws a {@link StudentRequestException}.

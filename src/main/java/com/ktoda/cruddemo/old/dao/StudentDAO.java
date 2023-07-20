@@ -1,4 +1,4 @@
-package com.ktoda.cruddemo.dao;
+package com.ktoda.cruddemo.old.dao;
 
 import com.ktoda.cruddemo.entity.Student;
 

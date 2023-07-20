@@ -63,7 +63,8 @@ public class StudentService {
             }
         } catch (StudentRequestNotFoundException e) {
             // No student found, it is safe to save the new student
-            return studentRepository.save(student);
+            Student s = new Student(student);
+            return studentRepository.save(s);
         }
 
         throw new StudentRequestException("Error creating student. Unable to determine the cause.");
