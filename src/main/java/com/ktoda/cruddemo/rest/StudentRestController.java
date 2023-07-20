@@ -1,16 +1,21 @@
 package com.ktoda.cruddemo.rest;
 
 import com.ktoda.cruddemo.entity.Student;
-import com.ktoda.cruddemo.exception.StudentRequestException;
+import com.ktoda.cruddemo.exception.*;
 import com.ktoda.cruddemo.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+/**
+ * This class is a REST controller that handles HTTP requests related to students.
+ * It provides endpoints for retrieving, adding, and finding students.
+ *
+ * @author Konstantin Andreev
+ * @version 1.0.0
+ */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class StudentRestController {
     private final StudentService studentService;
 
@@ -20,33 +25,60 @@ public class StudentRestController {
     }
 
     /**
-     * Endpoint for "api/students"
-     * <br>
-     * This method returns a list of all students.
+     * Returns a list of all students.
      *
-     * @return Iterable&lt;Student&gt; - the list of students
+     * @return ResponseEntity&lt;Iterable&lt;Student&gt;&gt; - the list of students
      * @see Student
      */
     @GetMapping("/students")
-    public Iterable<Student> findAllStudents() {
-        return studentService.findAll();
+    public ResponseEntity<Iterable<Student>> findAllStudents() {
+        return ResponseEntity.ok(studentService.findAll());
     }
 
 
     /**
-     * Endpoint for "api/students/{studentId}"
-     * <br>
-     * This method returns a student with a specific id. If the student doesn't exist, it throws a {@link StudentRequestException}.
+     * Returns a student with a specific id.
+     * If the student doesn't exist, it throws a {@link StudentRequestException}.
      *
      * @param studentId Integer - the id of the student
-     * @return Student - the student
-     * @throws StudentRequestException if student doesn't exist
-     * @see Student
-     * @see StudentRequestException
+     * @return ResponseEntity&lt;Student&gt; - the student
      */
     @GetMapping("/students/{studentId}")
-    public Student findStudentById(@PathVariable Integer studentId) {
-        return studentService.findStudentById(studentId)
-                .orElseThrow(() -> new StudentRequestException("No student found with id {" + studentId + "}"));
+    public ResponseEntity<Student> findStudentById(@PathVariable Integer studentId) {
+        return ResponseEntity.ok(studentService.findStudentById(studentId));
+    }
+
+    /**
+     * Adds a student.
+     *
+     * @param student the student to be added
+     * @return ResponseEntity&lt;Student&gt; - the new student
+     */
+    @PostMapping("/students")
+    public ResponseEntity<Student> save(@RequestBody Student student) {
+        return ResponseEntity.ok(studentService.save(student));
+    }
+
+    /**
+     * Updates a student.
+     *
+     * @param student the student to be updated
+     * @return ResponseEntity&lt;Student&gt; - the updated student
+     */
+    @PutMapping("/students")
+    public ResponseEntity<Student> update(@RequestBody Student student) {
+        return ResponseEntity.ok(studentService.update(student));
+    }
+
+    /**
+     * Deletes a student by their ID.
+     *
+     * @param studentId the ID of the student to be deleted
+     * @return ResponseEntity&lt;Void&gt; indicating the status of the deletion
+     */
+    @DeleteMapping("/students/{studentId}")
+    public ResponseEntity<Void> deleteById(@PathVariable Integer studentId) {
+        studentService.deleteById(studentId);
+        return ResponseEntity.noContent().build();
     }
 }

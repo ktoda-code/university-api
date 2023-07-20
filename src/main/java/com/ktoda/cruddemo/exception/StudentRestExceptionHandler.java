@@ -12,16 +12,27 @@ import java.time.ZonedDateTime;
 public class StudentRestExceptionHandler {
 
     @ExceptionHandler
-    public ResponseEntity<Object> handleStudentRequestNotFound(StudentRequestException e) {
+    public ResponseEntity<Object> handleStudentRequestNotFound(StudentRequestNotFoundException e) {
         // 1. Create payload containing exception details
-        HttpStatus notFoundRequest = HttpStatus.NOT_FOUND;
         StudentException studentException = new StudentException(
                 e.getMessage(),
-                notFoundRequest,
+                e.getStatus(),
                 ZonedDateTime.now(ZoneId.of("Z"))
         );
         // 2. Return response entity
-        return new ResponseEntity<>(studentException, notFoundRequest);
+        return new ResponseEntity<>(studentException, e.getStatus());
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Object> handleStudentRequestAlreadyExists(StudentRequestAlreadyExistsException e) {
+        // 1. Create payload containing exception details
+        StudentException studentException = new StudentException(
+                e.getMessage(),
+                e.getStatus(),
+                ZonedDateTime.now(ZoneId.of("Z"))
+        );
+        // 2. Return response entity
+        return new ResponseEntity<>(studentException, e.getStatus());
     }
 
     @ExceptionHandler

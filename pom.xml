@@ -41,6 +41,16 @@
             <artifactId>lombok-maven-plugin</artifactId>
             <version>1.18.20.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.krraghavan</groupId>
+            <artifactId>xeger</artifactId>
+            <version>1.0.0-RELEASE</version>
+        </dependency>
+        <!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-data-rest</artifactId>-->
+<!--            <version>3.0.4</version>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>
