@@ -1,6 +1,6 @@
 package com.ktoda.cruddemo.old.dao;
 
-import com.ktoda.cruddemo.entity.Student;
+import com.ktoda.cruddemo.entity.student.Student;
 
 import java.util.List;
 

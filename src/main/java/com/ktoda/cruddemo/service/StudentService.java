@@ -1,6 +1,6 @@
 package com.ktoda.cruddemo.service;
 
-import com.ktoda.cruddemo.entity.Student;
+import com.ktoda.cruddemo.entity.student.Student;
 import com.ktoda.cruddemo.exception.*;
 import com.ktoda.cruddemo.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +20,11 @@ public class StudentService {
 
     public Iterable<Student> findAll() {
         return studentRepository.findAll();
+    }
+
+    public Student findStudentByStudentId(String studentId) {
+        return studentRepository.findStudentByStudentId(studentId)
+                .orElseThrow(() -> new StudentRequestNotFoundException("User not found"));
     }
 
     /**

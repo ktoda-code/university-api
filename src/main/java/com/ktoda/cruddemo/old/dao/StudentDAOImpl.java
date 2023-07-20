@@ -1,6 +1,6 @@
 package com.ktoda.cruddemo.old.dao;
 
-import com.ktoda.cruddemo.entity.Student;
+import com.ktoda.cruddemo.entity.student.Student;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

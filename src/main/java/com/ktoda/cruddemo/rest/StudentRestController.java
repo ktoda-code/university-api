@@ -1,6 +1,6 @@
 package com.ktoda.cruddemo.rest;
 
-import com.ktoda.cruddemo.entity.Student;
+import com.ktoda.cruddemo.entity.student.Student;
 import com.ktoda.cruddemo.exception.*;
 import com.ktoda.cruddemo.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
