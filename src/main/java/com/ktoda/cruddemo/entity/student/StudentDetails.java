@@ -1,6 +1,5 @@
 package com.ktoda.cruddemo.entity.student;
 
-import com.ktoda.cruddemo.entity.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,7 +26,7 @@ public class StudentDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return student.getStudentId();
+        return student.getUsername();
     }
 
     @Override

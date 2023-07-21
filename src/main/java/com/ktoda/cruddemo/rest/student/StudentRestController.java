@@ -1,8 +1,8 @@
-package com.ktoda.cruddemo.rest;
+package com.ktoda.cruddemo.rest.student;
 
 import com.ktoda.cruddemo.entity.student.Student;
-import com.ktoda.cruddemo.exception.*;
-import com.ktoda.cruddemo.service.StudentService;
+import com.ktoda.cruddemo.exception.student.StudentRequestException;
+import com.ktoda.cruddemo.service.student.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

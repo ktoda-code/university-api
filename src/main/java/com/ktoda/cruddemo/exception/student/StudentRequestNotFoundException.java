@@ -1,4 +1,4 @@
-package com.ktoda.cruddemo.exception;
+package com.ktoda.cruddemo.exception.student;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

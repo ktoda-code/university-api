@@ -1,6 +1,6 @@
 package com.ktoda.cruddemo.security.student;
 
-import com.ktoda.cruddemo.service.StudentDetailsService;
+import com.ktoda.cruddemo.service.student.StudentDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +8,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -22,6 +23,7 @@ public class StudentSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // TODO: Will change for university-api
         http.authorizeHttpRequests(config -> config
                 .requestMatchers(HttpMethod.GET, "/api/v1/students").hasRole("STUDENT")
                 .requestMatchers(HttpMethod.GET, "/api/v1/students/**").hasRole("STUDENT")
@@ -34,7 +36,7 @@ public class StudentSecurityConfig {
         http.httpBasic(Customizer.withDefaults());
 
         // disable Cross-Site Request Forgery (CSRF), non required for stateless REST Api
-        // http.csrf(AbstractHttpConfigurer::disable);
+        http.csrf(AbstractHttpConfigurer::disable);
 
         return http.build();
     }

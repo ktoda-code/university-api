@@ -1,4 +1,4 @@
-package com.ktoda.cruddemo.service;
+package com.ktoda.cruddemo.service.student;
 
 import com.ktoda.cruddemo.entity.student.Student;
 import com.ktoda.cruddemo.entity.student.StudentDetails;
@@ -18,8 +18,8 @@ public class StudentDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String studentId) throws UsernameNotFoundException {
-        Student student = studentService.findStudentByStudentId(studentId);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Student student = studentService.findStudentByUsername(username);
         return new StudentDetails(student);
     }
 }

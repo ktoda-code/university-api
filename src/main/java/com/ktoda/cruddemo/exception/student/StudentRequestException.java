@@ -1,4 +1,4 @@
-package com.ktoda.cruddemo.exception;
+package com.ktoda.cruddemo.exception.student;
 
 public class StudentRequestException extends RuntimeException {
 

@@ -1,8 +1,10 @@
-package com.ktoda.cruddemo.service;
+package com.ktoda.cruddemo.service.student;
 
 import com.ktoda.cruddemo.entity.student.Student;
-import com.ktoda.cruddemo.exception.*;
-import com.ktoda.cruddemo.repository.StudentRepository;
+import com.ktoda.cruddemo.exception.student.StudentRequestAlreadyExistsException;
+import com.ktoda.cruddemo.exception.student.StudentRequestException;
+import com.ktoda.cruddemo.exception.student.StudentRequestNotFoundException;
+import com.ktoda.cruddemo.repository.student.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,8 +24,8 @@ public class StudentService {
         return studentRepository.findAll();
     }
 
-    public Student findStudentByStudentId(String studentId) {
-        return studentRepository.findStudentByStudentId(studentId)
+    public Student findStudentByUsername(String username) {
+        return studentRepository.findStudentByUsername(username)
                 .orElseThrow(() -> new StudentRequestNotFoundException("User not found"));
     }
 
@@ -39,7 +41,8 @@ public class StudentService {
      */
     public Student findStudentById(Integer id) {
         return studentRepository.findById(id)
-                .orElseThrow(() -> new StudentRequestNotFoundException("No student found with id {" + id + "}"));
+                .orElseThrow(() ->
+                        new StudentRequestNotFoundException("No student found with id {" + id + "}"));
     }
 
     public Student findStudentByLastName(String lastName) {
@@ -96,10 +99,6 @@ public class StudentService {
 
     public Iterable<Student> findStudentsByEmailLike(String email) {
         return studentRepository.findStudentsByEmailLike(email);
-    }
-
-    public void updateStudent(Student student) { // This is the same as using the save(student)
-        studentRepository.updateStudentById(student.getFirstName(), student.getLastName(), student.getEmail(), student.getId());
     }
 
     public long count() {

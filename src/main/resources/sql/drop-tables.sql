@@ -1,1 +1,1 @@
-drop table if exists students, users, authorities;
+drop table if exists students, users, authorities, teachers, tech_personal, offices, subjects, student_subject;
