@@ -9,10 +9,10 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 @ControllerAdvice
-public class StudentRestExceptionHandler {
+public class StudentExceptionHandler {
 
     @ExceptionHandler
-    public ResponseEntity<Object> handleStudentRequestNotFound(StudentRequestNotFoundException e) {
+    public ResponseEntity<Object> handleStudentRequestNotFound(StudentNotFoundException e) {
         // 1. Create payload containing exception details
         StudentException studentException = new StudentException(
                 e.getMessage(),
@@ -24,7 +24,7 @@ public class StudentRestExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<Object> handleStudentRequestAlreadyExists(StudentRequestAlreadyExistsException e) {
+    public ResponseEntity<Object> handleStudentRequestAlreadyExists(StudentAlreadyExistsException e) {
         // 1. Create payload containing exception details
         StudentException studentException = new StudentException(
                 e.getMessage(),

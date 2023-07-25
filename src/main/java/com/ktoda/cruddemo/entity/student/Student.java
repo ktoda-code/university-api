@@ -28,8 +28,9 @@ public class Student extends UniversityPersonal {
             inverseJoinColumns = @JoinColumn(name = "subject_id"))
     private List<Subject> subjects;
 
-    public Student(String password, String firstName, String lastName, String email, List<Subject> subjects) {
-        super(password, firstName, lastName, email, Role.STUDENT);
+    public Student(String password, String firstName, String lastName, String email,
+                   List<Subject> subjects, String username) {
+        super(password, firstName, lastName, email, Role.STUDENT, username);
         this.subjects = subjects;
     }
 
@@ -39,12 +40,8 @@ public class Student extends UniversityPersonal {
                 student.getFirstName(),
                 student.getLastName(),
                 student.getEmail(),
-                student.getSubjects());
+                student.getSubjects(),
+                student.getUsername());
     }
 
-    public String generateUsername() {
-        String regex = getFirstName().toLowerCase() + "[0-9]{3}";
-        Xeger generator = new Xeger(regex);
-        return generator.generate();
-    }
 }

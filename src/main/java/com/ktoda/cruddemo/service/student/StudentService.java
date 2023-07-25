@@ -1,10 +1,13 @@
 package com.ktoda.cruddemo.service.student;
 
 import com.ktoda.cruddemo.entity.student.Student;
-import com.ktoda.cruddemo.exception.student.StudentRequestAlreadyExistsException;
+import com.ktoda.cruddemo.exception.student.StudentAlreadyExistsException;
 import com.ktoda.cruddemo.exception.student.StudentRequestException;
-import com.ktoda.cruddemo.exception.student.StudentRequestNotFoundException;
+import com.ktoda.cruddemo.exception.student.StudentNotFoundException;
 import com.ktoda.cruddemo.repository.student.StudentRepository;
+import com.ktoda.cruddemo.service.utility.CrudService;
+import com.ktoda.cruddemo.service.utility.UserService;
+import nl.flotsam.xeger.Xeger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class StudentService {
+public class StudentService implements UserService, CrudService<Student> {
     private final StudentRepository studentRepository;
 
     @Autowired
@@ -24,9 +27,15 @@ public class StudentService {
         return studentRepository.findAll();
     }
 
+    @Override
+    public Student findById(Integer id) {
+        return studentRepository.findById(id)
+                .orElseThrow(() -> new StudentNotFoundException("Student not found!"));
+    }
+
     public Student findStudentByUsername(String username) {
         return studentRepository.findStudentByUsername(username)
-                .orElseThrow(() -> new StudentRequestNotFoundException("User not found"));
+                .orElseThrow(() -> new StudentNotFoundException("User not found"));
     }
 
     /**
@@ -37,12 +46,12 @@ public class StudentService {
      * @throws StudentRequestException if no student is found with the given ID
      * @see Student
      * @see StudentRequestException
-     * @see StudentRequestNotFoundException
+     * @see StudentNotFoundException
      */
     public Student findStudentById(Integer id) {
         return studentRepository.findById(id)
                 .orElseThrow(() ->
-                        new StudentRequestNotFoundException("No student found with id {" + id + "}"));
+                        new StudentNotFoundException("No student found with id {" + id + "}"));
     }
 
     public Student findStudentByLastName(String lastName) {
@@ -62,14 +71,14 @@ public class StudentService {
      * @throws StudentRequestException if student already exist
      * @see Student
      * @see StudentRequestException
-     * @see StudentRequestAlreadyExistsException
+     * @see StudentAlreadyExistsException
      */
     public Student save(Student student) {
         try {
             if (findStudentById(student.getId()).getId().equals(student.getId())) {
-                throw new StudentRequestAlreadyExistsException("Student already exists!");
+                throw new StudentAlreadyExistsException("Student already exists!");
             }
-        } catch (StudentRequestNotFoundException e) {
+        } catch (StudentNotFoundException e) {
             // No student found, it is safe to save the new student
             Student s = new Student(student);
             return studentRepository.save(s);
@@ -86,13 +95,14 @@ public class StudentService {
      * @throws StudentRequestException if no student is found with the given ID
      * @see Student
      * @see StudentRequestException
-     * @see StudentRequestNotFoundException
+     * @see StudentNotFoundException
      */
     public Student update(Student student) {
         findStudentById(student.getId());
         return studentRepository.save(student);
     }
 
+    @Transactional
     public void saveAll(List<Student> students) {
         studentRepository.saveAll(students);
     }
@@ -109,8 +119,8 @@ public class StudentService {
      * Deletes a student by their ID.
      *
      * @param id the ID of the student to be deleted
-     * @throws StudentRequestNotFoundException if no student is found with the given ID
-     * @see StudentRequestNotFoundException
+     * @throws StudentNotFoundException if no student is found with the given ID
+     * @see StudentNotFoundException
      */
     @Transactional
     public void deleteById(Integer id) {
@@ -121,5 +131,24 @@ public class StudentService {
     @Transactional
     public void deleteAll() {
         studentRepository.deleteAll();
+    }
+
+    Student findStudentByFirstNameOrLastName(String firstName, String lastName) {
+        return studentRepository.findStudentByFirstNameOrLastName(firstName, lastName);
+    }
+
+    public Iterable<Student> findAllStudentsOfTeacherById(Integer teacherId) {
+        return studentRepository.findAllStudentsOfTeacherById(teacherId);
+    }
+
+    public Iterable<Student> findAllStudentsBySubjectIdAndTeacherId(Integer teacherId, Integer subjectId) {
+        return studentRepository.findAllStudentsBySubjectIdAndTeacherId(teacherId, subjectId);
+    }
+
+    @Override
+    public String generateUsername(String firstName) {
+        String regex = firstName.toLowerCase() + "[0-9]{3}";
+        Xeger generator = new Xeger(regex);
+        return generator.generate();
     }
 }

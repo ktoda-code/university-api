@@ -1,4 +1,4 @@
-package com.ktoda.cruddemo.entity.university;
+package com.ktoda.cruddemo.entity.department;
 
 import com.ktoda.cruddemo.entity.subject.Subject;
 import com.ktoda.cruddemo.entity.teacher.Teacher;
@@ -19,7 +19,7 @@ public class Department {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "department_id")
     private Integer id;
-    private String name;
+    private String name; // Name is AI, SE, CO, HW, ... others are without department
     private String description;
     @OneToMany(mappedBy = "department")
     private List<Teacher> teachers;

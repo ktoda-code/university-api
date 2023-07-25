@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class StudentsApiApplication {
+public class UniversityApiApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(StudentsApiApplication.class, args);
+        SpringApplication.run(UniversityApiApplication.class, args);
     }
 }

@@ -1,7 +1,7 @@
 package com.ktoda.cruddemo.entity.subject;
 
 import com.ktoda.cruddemo.entity.student.Student;
-import com.ktoda.cruddemo.entity.university.Department;
+import com.ktoda.cruddemo.entity.department.Department;
 import com.ktoda.cruddemo.entity.teacher.Teacher;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import nl.flotsam.xeger.Xeger;
 
 import java.util.List;
 
@@ -52,12 +51,6 @@ public class Subject {
         this.students = students;
         this.department = department;
         this.grades = grades;
-        this.subjectCode = generateSubjectCode();
-    }
-
-    private String generateSubjectCode() {
-        String regex = name.toUpperCase().charAt(0) + "[0-9]{3}";
-        Xeger generator = new Xeger(regex);
-        return generator.generate();
+        this.subjectCode = subjectCode;
     }
 }

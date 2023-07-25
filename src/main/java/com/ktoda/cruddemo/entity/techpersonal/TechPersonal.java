@@ -19,12 +19,8 @@ public class TechPersonal extends UniversityPersonal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    public TechPersonal(String password, String firstName, String lastName, String email, Role role) {
-        super(password, firstName, lastName, email, Role.ADMIN);
+    public TechPersonal(String password, String firstName, String lastName, String email, String username) {
+        super(password, firstName, lastName, email, Role.ADMIN, username);
     }
 
-    @Override
-    public String generateUsername() {
-        return "admin@" + getFirstName().toLowerCase();
-    }
 }

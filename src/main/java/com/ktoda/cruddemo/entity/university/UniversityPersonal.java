@@ -22,15 +22,13 @@ public abstract class UniversityPersonal {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public UniversityPersonal(String password, String firstName, String lastName, String email, Role role) {
+    public UniversityPersonal(String password, String firstName, String lastName, String email, Role role, String username) {
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.active = true;
         this.role = role;
-        this.username = generateUsername();
+        this.username = username;
     }
-
-    public abstract String generateUsername();
 }

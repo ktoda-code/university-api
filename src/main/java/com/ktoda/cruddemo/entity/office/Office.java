@@ -1,7 +1,7 @@
-package com.ktoda.cruddemo.entity.teacher;
+package com.ktoda.cruddemo.entity.office;
 
 import com.ktoda.cruddemo.entity.teacher.Teacher;
-import com.ktoda.cruddemo.entity.university.Department;
+import com.ktoda.cruddemo.entity.department.Department;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +25,7 @@ public class Office {
     @OneToOne(mappedBy = "office")
     private Teacher teacher;
 
-    public Office(Integer officeNumber, Integer floor, Integer buildingNumber, Teacher teacher) {
+    public Office(Integer officeNumber, Integer floor, Teacher teacher) {
         this.officeNumber = officeNumber;
         this.floor = floor;
         this.teacher = teacher;
