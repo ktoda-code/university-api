@@ -1,10 +1,13 @@
 package com.ktoda.cruddemo.service.student;
 
 import com.ktoda.cruddemo.entity.student.Student;
+import com.ktoda.cruddemo.entity.subject.Subject;
 import com.ktoda.cruddemo.exception.student.StudentAlreadyExistsException;
 import com.ktoda.cruddemo.exception.student.StudentRequestException;
 import com.ktoda.cruddemo.exception.student.StudentNotFoundException;
+import com.ktoda.cruddemo.exception.subject.SubjectNotFoundException;
 import com.ktoda.cruddemo.repository.student.StudentRepository;
+import com.ktoda.cruddemo.repository.subject.SubjectRepository;
 import com.ktoda.cruddemo.service.utility.CrudService;
 import com.ktoda.cruddemo.service.utility.UserService;
 import nl.flotsam.xeger.Xeger;
@@ -17,10 +20,12 @@ import java.util.List;
 @Service
 public class StudentService implements UserService, CrudService<Student> {
     private final StudentRepository studentRepository;
+    private final SubjectRepository subjectRepository;
 
     @Autowired
-    public StudentService(StudentRepository studentRepository) {
+    public StudentService(StudentRepository studentRepository, SubjectRepository subjectRepository) {
         this.studentRepository = studentRepository;
+        this.subjectRepository = subjectRepository;
     }
 
     public Iterable<Student> findAll() {
@@ -145,10 +150,55 @@ public class StudentService implements UserService, CrudService<Student> {
         return studentRepository.findAllStudentsBySubjectIdAndTeacherId(teacherId, subjectId);
     }
 
+    public Iterable<Student> findAllStudentsOfStudentInSubjectsByFirstName(String firstName) {
+        return studentRepository.findAllStudentsOfStudentInSubjectsByFirstName(firstName);
+    }
+
     @Override
     public String generateUsername(String firstName) {
         String regex = firstName.toLowerCase() + "[0-9]{3}";
         Xeger generator = new Xeger(regex);
         return generator.generate();
+    }
+
+    @Override
+    public String generateEmail(String firstName, String lastName) {
+        String studentEmail = "@student.com";
+        return firstName.toLowerCase().charAt(0) + lastName.toLowerCase() + studentEmail;
+    }
+
+    public Student save(String firstName, String lastName, String password) {
+        Student student = new Student(password, firstName, lastName, generateEmail(firstName, lastName),
+                List.of(), generateUsername(firstName));
+        return studentRepository.save(student);
+    }
+
+    @Transactional
+    public Student assignSubject(Integer subjectId, Integer studentId) {
+        Subject subject = subjectRepository.findById(subjectId)
+                .orElseThrow(() -> new SubjectNotFoundException("Subject not found!"));
+        Student student = findStudentById(studentId);
+
+        if (student.getSubjects().contains(subject)) {
+            throw new RuntimeException("Subject already assigned!");
+        } else {
+            student.getSubjects().add(subject);
+        }
+
+        return studentRepository.save(student);
+    }
+
+    public Student gradeStudent(Integer subjectId, Integer studentId, Double grade) {
+        Subject subject = subjectRepository.findById(subjectId)
+                .orElseThrow(() -> new SubjectNotFoundException("Subject not found!"));
+        Student student = findStudentById(studentId);
+
+        if (student.getSubjects().contains(subject)) {
+            subject.getGrades().add(grade);
+        } else {
+            throw new RuntimeException("Subject not assigned to student!");
+        }
+
+        return studentRepository.save(student);
     }
 }

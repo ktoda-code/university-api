@@ -1,10 +1,6 @@
 package com.ktoda.cruddemo.service.teacher;
 
-import com.ktoda.cruddemo.entity.student.Student;
 import com.ktoda.cruddemo.entity.teacher.Teacher;
-import com.ktoda.cruddemo.exception.student.StudentAlreadyExistsException;
-import com.ktoda.cruddemo.exception.student.StudentNotFoundException;
-import com.ktoda.cruddemo.exception.student.StudentRequestException;
 import com.ktoda.cruddemo.exception.teacher.TeacherAlreadyExistsException;
 import com.ktoda.cruddemo.exception.teacher.TeacherNotFoundException;
 import com.ktoda.cruddemo.exception.teacher.TeacherRequestException;
@@ -32,19 +28,27 @@ public class TeacherService implements UserService, CrudService<Teacher> {
     }
 
     @Override
+    public String generateEmail(String firstName, String lastName) {
+        String teacherEmail = "@teacher.com";
+        return firstName.toLowerCase().charAt(0) + lastName.toLowerCase() + teacherEmail;
+    }
+
+    @Override
     public Teacher save(Teacher entity) {
         try {
             if (findTeacherById(entity.getId()).getId().equals(entity.getId())) {
-                throw new TeacherAlreadyExistsException("Student already exists!");
+                throw new TeacherAlreadyExistsException("Teacher already exists!");
             }
         } catch (TeacherNotFoundException e) {
+            entity.setUsername(generateUsername(entity.getFirstName()));
+            entity.setEmail(generateEmail(entity.getFirstName(), entity.getLastName()));
             return teacherRepository.save(entity);
         }
 
         throw new TeacherRequestException("Error creating teacher. Unable to determine the cause.");
     }
 
-    private Teacher findTeacherById(Integer id) {
+    public Teacher findTeacherById(Integer id) {
         return teacherRepository.findById(id)
                 .orElseThrow(() -> new TeacherNotFoundException("Teacher not found!"));
     }
@@ -63,5 +67,10 @@ public class TeacherService implements UserService, CrudService<Teacher> {
     @Override
     public void deleteById(Integer id) {
         teacherRepository.deleteById(id);
+    }
+
+    public Teacher findTeacherByUsername(String username) {
+        return teacherRepository.findTeacherByUsername(username)
+                .orElseThrow(() -> new TeacherNotFoundException("Teacher not found!"));
     }
 }

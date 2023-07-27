@@ -22,7 +22,7 @@ public class Office {
     private Integer floor;
     @Column(name = "building_number")
     private Integer buildingNumber;
-    @OneToOne(mappedBy = "office")
+    @OneToOne
     private Teacher teacher;
 
     public Office(Integer officeNumber, Integer floor, Teacher teacher) {

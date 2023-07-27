@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  * @version 1.0.0
  */
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/university")
 public class StudentRestController {
     private final StudentService studentService;
 
@@ -45,6 +45,25 @@ public class StudentRestController {
     @GetMapping("/students/{studentId}")
     public ResponseEntity<Student> findStudentById(@PathVariable Integer studentId) {
         return ResponseEntity.ok(studentService.findStudentById(studentId));
+    }
+
+    /**
+     * Retrieves all students associated with a specific teacher.
+     * <p>
+     * This endpoint allows retrieval of a collection of students who are assigned to a particular teacher.
+     *
+     * @param teacherId The ID of the teacher for whom to fetch the associated students.
+     * @return A ResponseEntity containing an Iterable of Student objects associated with the specified teacher.
+     * The response will have a status code 200 (OK) if successful, along with the collection of students.
+     * If the teacherId is not found, a status code 404 (Not Found) will be returned.
+     * If there is an unexpected error during the retrieval process, a status code 500 (Internal Server Error) will be returned.
+     * @see Student
+     * @see ResponseEntity
+     * @see StudentService#findAllStudentsOfTeacherById(Integer)
+     */
+    @GetMapping("students/{teacherId}")
+    public ResponseEntity<Iterable<Student>> findAllStudentsOfSubjectByTeacher(@PathVariable Integer teacherId) {
+        return ResponseEntity.ok(studentService.findAllStudentsOfTeacherById(teacherId));
     }
 
     /**
@@ -80,4 +99,5 @@ public class StudentRestController {
         studentService.deleteById(studentId);
         return ResponseEntity.noContent().build();
     }
+
 }

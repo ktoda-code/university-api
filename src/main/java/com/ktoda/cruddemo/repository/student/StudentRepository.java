@@ -37,7 +37,7 @@ public interface StudentRepository extends CrudRepository<Student, Integer> {
     @Query("select subj.students from Teacher t join t.subjects as subj " +
             "where t.id = :teacherId and subj.id = :subjectId")
     Iterable<Student> findAllStudentsBySubjectIdAndTeacherId(@Param("teacherId") Integer teacherId,
-                                                 @Param("subjectId") Integer subjectId);
+                                                             @Param("subjectId") Integer subjectId);
 
     @Query("select subj.grades " +
             "from Student s " +
@@ -45,4 +45,9 @@ public interface StudentRepository extends CrudRepository<Student, Integer> {
             "where s.id = :studentId and subj.name = :subjectName")
     Iterable<Double> findAllGradesOfStudentByIdAndBySubjectName(@Param("studentId") Integer studentId,
                                                                 @Param("subjectName") String subjectName);
+
+    @Query("select s from Student s where s.firstName != :firstName and s.id in " +
+            "(select stu.id from Subject subj join subj.students stu where subj.id in " +
+            "(select subj.id from Student s2 join s2.subjects subj where s2.firstName = :firstName))")
+    Iterable<Student> findAllStudentsOfStudentInSubjectsByFirstName(@Param("firstName") String firstName);
 }

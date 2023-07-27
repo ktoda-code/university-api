@@ -23,7 +23,7 @@ public class Teacher extends UniversityPersonal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "teacher_id", unique = true)
     private Integer id;
-    @OneToOne(mappedBy = "teacher")
+    @OneToOne
     private Office office;
     @ManyToOne
     @JoinColumn(name = "department_id")

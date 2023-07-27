@@ -22,23 +22,38 @@ public class TechPersonalService implements UserService, CrudService<TechPersona
     }
 
     @Override
+    public String generateEmail(String firstName, String lastName) {
+        String techEmail = "@tech.com";
+        return firstName.toLowerCase().charAt(0) + lastName.toLowerCase() + techEmail;
+    }
+
+    @Override
     public TechPersonal save(TechPersonal entity) {
         entity.setUsername(generateUsername(entity.getFirstName()));
+        entity.setEmail(generateEmail(
+                entity.getFirstName(),
+                entity.getLastName()));
         return techPersonalRepository.save(entity);
     }
 
     @Override
     public Iterable<TechPersonal> findAll() {
-        return null;
+        return techPersonalRepository.findAll();
     }
 
     @Override
     public TechPersonal findById(Integer id) {
-        return null;
+        return techPersonalRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Not found!"));
     }
 
     @Override
     public void deleteById(Integer id) {
+        techPersonalRepository.deleteById(id);
+    }
 
+    public TechPersonal findByUsername(String username) {
+        return techPersonalRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Not found!"));
     }
 }
